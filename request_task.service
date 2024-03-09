@@ -1,0 +1,13 @@
+[Unit]
+Description=Loading data archives from the blockchair resource on a schedule
+After=docker.service
+
+[Service]
+User=user
+Group=user
+WorkingDirectory=/app
+ExecStart=/usr/bin/python3 scripts/load_data.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
