@@ -6,7 +6,7 @@ After=docker.service
 User=user
 Group=user
 WorkingDirectory=/app
-ExecStart=/usr/bin/python3 scripts/load_data.py
+ExecStart=/usr/bin/python3 load_data.py
 Restart=always
 
 [Install]
