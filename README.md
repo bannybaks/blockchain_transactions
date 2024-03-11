@@ -67,5 +67,5 @@ sudo docker-compose up -d
 
 Доступна после запуска сервиса:
 
-**swagger** - `http://<localhost OR ip remote host mashine>:8000/swagger/`  
+**swagger** - `http://<localhost OR ip remote host mashine>:8000/docs/`  
 **redoc** - `http://<localhost OR ip remote host mashine>:8000/redoc/`
