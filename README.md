@@ -1,52 +1,43 @@
-# Bitcoin from Blockchair
+<a id="anchor"></a>
+<div align=center>
 
+  # BitcoinGraphLoader
+
+  ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+  ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
+  ![FastAPI](https://img.shields.io/badge/fastapi-8A2BE2.svg?style=for-the-badge&logo=FastAPI&logoColor=white)
+  ![Neo4j](https://img.shields.io/badge/Neo4j-%23009639.svg?style=for-the-badge&logo=Neo4j&logoColor=white)
+</div>
+
+
+1. [Описание](#описание)
+2. [Установка](#установка)
+3. [Использование](#использование)
+4. [Документация](#документация)
+5. [Автор](#автор)
+6. [Контакты](#контакты)
 
 ## Описание:
 
-Бэкенд-приложение по загрузке данных по bitcoin транзакциям в графовую БД neo4j.
+Бэкенд-приложение по загрузке данных bitcoin транзакций в графовую БД neo4j каждые 24 часа за предыдущие сутки.
+
+#### **Как это работает:**
+
+*Загрузка данных* -
+Через подготовленый пайплайн загрузки данных каждые 24 часа происходит загрузка данных по транзакциям Bitcoin с ресурса https://blockchair.com/dumps
+
+*Чтение архивов, преобразование данных к необходимому формату* -
+Далее скачанный архив по завершению загрузки разархивируется в корень
+
+*Выгрузка данных* - По завершению работы с архивом данные заливаются в базу
+
+>**Note:**  
+> *При первом запуске сервиса до 00:00 требуется ручной запуск скрипта загрузки/выгрузки данных из командной строки контейнера:*  
+`$ sudo docker exec <CONTAINER ID> python /app/load_data.py` 
 
 
-- **Разработана структура хранения данных в графовой БД Neo4j;**  
+## Установка и использование
 
-- **Подготовлен пайплайн загрузки данных (чтение архивов, преобразование данных к необходимому формату, загрузка данных в графовую БД). Загрузка данных из сети по расписанию в 00:00, либо вручную через командную строку в контейнере;**
-    >**Attention!**  
-    > при первом запуске сервиса до 00:00 требуется ручной запуск скрипта загрузки/выгрузки данных из командной строки контейнера: 
-    `$ sudo docker exec <CONTAINER ID> python /app/load_data.py`;  
-
-- **Интерфейс для просмотра списка транзакций и детальной информации по группе транзакций через веб-приложение посредством Swagger;**
-
-
->**Note**  
-> архивы с данными - https://gz.blockchair.com/bitcoin/transactions/;  
-
-
-**Структура БД:**
-```Markdown
-    Transaction:
-        hash: Block hash
-        time: Block time (UTC)
-        size: Block size in bytes
-        weight: Block weight in weight units
-        version: Version field
-        lock_time: Lock time — can be either a block height, or a unix timestamp
-        is_coinbase: Is it a coinbase (generating new coins) transaction? (For such a transaction input_count is equal to 1 and means there's a synthetic coinbase input)
-        has_witness: Is there a witness part in the transaction (using SegWit)?
-        input_count: Number of inputs
-        output_count: Number of outputs
-        input_total: Input value in satoshi
-        input_total_usd: Input value in USD
-        output_total: Output value in satoshi
-        output_total_usd: Total output value in USD
-        fee: Fee in satoshi
-        fee_usd: Fee in USD
-        fee_per_kb: Fee per kilobyte (1000 bytes) of data in satoshi
-        fee_per_kb_usd: Fee for kilobyte of data in USD	
-        fee_per_kwu: Fee for 1000 weight units of data in satoshi
-        fee_per_kwu_usd: Fee for 1000 weight units of data in USD
-        cdd_total: The number of destroyed coindays
-```
-
-#### Запуск сервиса
 1. Склонировать репозиторий в рабочее пространство:
 ```bash
 git clone git@github.com:bannybaks/blockchain_transactions.git
@@ -62,10 +53,15 @@ PASSWORD_DB=<your password>
 sudo docker-compose up -d
 ```
 
-
-### Документация
+## Документация
 
 Доступна после запуска сервиса:
 
 **swagger** - `http://<localhost OR ip remote host mashine>:8000/docs/`  
 **redoc** - `http://<localhost OR ip remote host mashine>:8000/redoc/`
+
+## Автор
+
+**Павел Смирнов**
+
+[![Telegram Badge](https://img.shields.io/badge/-B1kas-blue?style=social&logo=telegram&link=https://t.me/B1kas)](https://t.me/B1kas) [![Yamail Badge](https://img.shields.io/badge/baksbannysmirnov@yandex.ru-FFCC00?style=flat&logo=ycombinator&logoColor=red&link=mailto:baksbannysmirnov@yandex.ru)](mailto:baksbannysmirnov@yandex.ru)
